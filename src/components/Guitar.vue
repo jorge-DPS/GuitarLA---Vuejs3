@@ -1,7 +1,5 @@
 <script setup>
 import { ref } from "vue";
-const number = ref(0);
-
 
  const props = defineProps({
   guitar: {
@@ -24,7 +22,6 @@ const number = ref(0);
         :alt="'imagen guitarra ' + guitar.nombre" />
     </div>
     <div class="col-8">
-      <p>{{ number }}</p>
       <h3 class="text-black fs-4 fw-bold text-uppercase">{{ guitar.nombre }}</h3>
       <p>
         {{ guitar.descripcion }}

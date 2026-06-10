@@ -1,10 +1,14 @@
 <script setup>
-  const props = defineProps({
-    cart: {
-      type: Array,
-      required: true,
-    },
-  })
+const props = defineProps({
+  cart: {
+    type: Array,
+    required: true,
+  },
+});
+
+defineEmits(["decrement-quantity", "increment-quantity"]);
+
+console.log(props);
 </script>
 
 <template>
@@ -42,20 +46,32 @@
                     </tr>
                   </thead>
                   <tbody>
-                    <tr>
+                    <tr v-for="product in cart">
                       <td>
                         <img
                           class="img-fluid"
-                          src="/img/guitarra_02.jpg"
-                          alt="imagen guitarra"
+                          :src="'/img/' + product.imagen + '.jpg'"
+                          :alt="'imagen guitarra' + product.nombre"
                         />
                       </td>
                       <td>SRV</td>
                       <td class="fw-bold">$299</td>
                       <td class="flex align-items-start gap-4">
-                        <button type="button" class="btn btn-dark">-</button>
-                        1
-                        <button type="button" class="btn btn-dark">+</button>
+                        <button
+                          type="button"
+                          class="btn btn-dark"
+                          @click="$emit('decrement-quantity', product.id)"
+                        >
+                          -
+                        </button>
+                        {{ product.quantity }}
+                        <button
+                          type="button"
+                          class="btn btn-dark"
+                          @click="$emit('increment-quantity', product.id)"
+                        >
+                          +
+                        </button>
                       </td>
                       <td>
                         <button class="btn btn-danger" type="button">X</button>
@@ -66,11 +82,10 @@
                 <p class="text-end">
                   Total pagar: <span class="fw-bold">$899</span>
                 </p>
+                <button class="btn btn-dark w-100 mt-3 p-2">
+                  Vaciar Carrito
+                </button>
               </div>
-
-              <button class="btn btn-dark w-100 mt-3 p-2">
-                Vaciar Carrito
-              </button>
             </div>
           </div>
         </nav>

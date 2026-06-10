@@ -13,13 +13,36 @@ onMounted(() => {
 });
 
 const addToCart = (guitar) => {
-  cart.value.push(guitar);
+  const existCart = cart.value.findIndex(product => product.id === guitar.id)
+  if (existCart >= 0) {
+    cart.value[existCart].quantity++
+  }else{
+    guitar.quantity = 1
+    cart.value.push(guitar)
+  }
+  
 };
+
+const decrementQuantity = (id) => {
+    const index = cart.value.findIndex(product => product.id === id)
+    if(cart.value[index].quantity <= 1) return
+    cart.value[index].quantity--
+
+}
+
+const incrementQuantity = (id) => {
+  const index = cart.value.findIndex(product => product.id === id)
+  if(cart.value[index].quantity >= 5) return
+  cart.value[index].quantity++
+  
+}
 </script>
 
 <template>
   <Header 
     :cart="cart"
+    @decrement-quantity="decrementQuantity"
+    @increment-quantity="incrementQuantity"
   />
 
   <main class="container-xl mt-5">
@@ -31,7 +54,7 @@ const addToCart = (guitar) => {
         :guitar="guitar"
         :key="guitar.id"
         @add-to-cart="addToCart"
-      />
+              />
     </div>
   </main>
 
