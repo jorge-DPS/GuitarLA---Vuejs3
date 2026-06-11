@@ -39,5 +39,3 @@ import { ref } from "vue";
   <!-- FIN GUITARRA -->
 </template>
 
-
-<style lang="scss" scoped></style>

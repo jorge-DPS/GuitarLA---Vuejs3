@@ -1,14 +1,23 @@
 <script setup>
+import { computed } from 'vue';
+
 const props = defineProps({
   cart: {
     type: Array,
     required: true,
   },
+  promGuitar: {
+    type: Object,
+    required: true,
+  }
 });
 
-defineEmits(["decrement-quantity", "increment-quantity"]);
+defineEmits(["decrement-quantity", "increment-quantity", "add-to-cart", "remove-product", "delete-cart"]);
 
-console.log(props);
+const totalPay = computed( () => {
+  return props.cart.reduce((total, product) => total + (product.quantity * product.precio), 0)
+})
+
 </script>
 
 <template>
@@ -54,8 +63,8 @@ console.log(props);
                           :alt="'imagen guitarra' + product.nombre"
                         />
                       </td>
-                      <td>SRV</td>
-                      <td class="fw-bold">$299</td>
+                      <td>{{ product.nombre }}</td>
+                      <td class="fw-bold">${{ product.precio }}</td>
                       <td class="flex align-items-start gap-4">
                         <button
                           type="button"
@@ -74,15 +83,15 @@ console.log(props);
                         </button>
                       </td>
                       <td>
-                        <button class="btn btn-danger" type="button">X</button>
+                        <button class="btn btn-danger" type="button" @click="$emit('remove-product', product.id)">X</button>
                       </td>
                     </tr>
                   </tbody>
                 </table>
                 <p class="text-end">
-                  Total pagar: <span class="fw-bold">$899</span>
+                  Total pagar: <span class="fw-bold">${{ totalPay }}</span>
                 </p>
-                <button class="btn btn-dark w-100 mt-3 p-2">
+                <button class="btn btn-dark w-100 mt-3 p-2" @click="$emit('delete-cart')">
                   Vaciar Carrito
                 </button>
               </div>
@@ -94,17 +103,15 @@ console.log(props);
 
       <div class="row mt-5">
         <div class="col-md-6 text-center text-md-start pt-5">
-          <h1 class="display-2 fw-bold">Modelo VAI</h1>
+          <h1 class="display-2 fw-bold">Modelo {{ promGuitar.nombre }}</h1>
           <p class="mt-5 fs-5 text-white">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Temporibus,
-            possimus quibusdam dolor nemo velit quo, fuga omnis, iure molestias
-            optio tempore sint at ipsa dolorum odio exercitationem eos inventore
-            odit.
+            {{ promGuitar.descripcion }}
           </p>
-          <p class="text-primary fs-1 fw-black">$399</p>
+          <p class="text-primary fs-1 fw-black">${{ promGuitar.precio }}</p>
           <button
             type="button"
             class="btn fs-4 bg-primary text-white py-2 px-5"
+            @click="$emit('add-to-cart', promGuitar)"
           >
             Agregar al Carrito
           </button>
